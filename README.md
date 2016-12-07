@@ -44,6 +44,18 @@ a new understanding about javascript
       //原始形态
       var { foo: foo, bar: bar } = { foo: "aaa", bar: "bbb" };
       // foo 是匹配的模式 ， foo：后的foo才是变量，真正被赋值的是变量
+    
+      //嵌套模式下的对象解构 (对象中的对象（狭义对象，数组，函数）)
+      var obj = {
+        p: [
+          'Hello',
+          { y: 'World' }
+        ]
+      };
+          //注意，这时p是模式，不是变量，因此不会被赋值。
+      var { p: [x, { y }] } = obj;
+      x // "Hello"
+      y // "World"
     ```
 
   
