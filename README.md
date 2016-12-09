@@ -58,4 +58,21 @@ a new understanding about javascript
       y // "World"
     ```
 
+    
+> 函数参数的解构赋值
+
+* 写法一函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；
+  写法二函数参数的默认值是一个有具体属性的对象，但是没有设置对象解构赋值的默认值。
+    
+    ```javascript
+        // 写法一
+        function m1({x = 0, y = 0} = {}) {
+          return [x, y];
+        }
+        
+        // 写法二
+        function m2({x, y} = { x: 0, y: 0 }) {
+          return [x, y];
+        }
+    ```
   
