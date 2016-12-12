@@ -9,7 +9,7 @@ a new understanding about javascript
 6. [对象](#6)
 
 
-<h6 id="1">1. Js 基本组成</h6>
+<h2 id="1">1. Js 基本组成</h2>
 
 * 基础语法 —— 语法、数据类型、数据类型转换、错误处理机制等
 * 标准库 ——　各类广义对象及其携带的属性、方法
@@ -17,7 +17,7 @@ a new understanding about javascript
 * 浏览器 API
 * WEB API
 
->　<span id="2">Js 数据类型 —— 字符串、数值、布尔值、undefined、null、对象、Symbol</span>
+<h2 id="2">Js 数据类型 —— 字符串、数值、布尔值、undefined、null、对象、Symbol</h2>
 
 * 原始类型 —— 字符串、数值、布尔值
 * 合成类型 ——　对象 （JavaScript的所有数据，都可以视为广义的对象）
@@ -35,13 +35,13 @@ a new understanding about javascript
     * 同步 ： 下一个任务等待上一个任务执行完成之后再执行
     * 异步 ： 任务提交请求之后，通过回调函数处理回应，从而继续执行任务，任务之间没有等待
 
-> <span id="3">数组的解构赋值</span>
+<h2 id="3">数组的解构赋值</h2>
 
 * 数组的元素是按照次序来排列的，变量的取值由它的位置来决定。
 
     `var [a, b, c] = [1, 2, 3];`
          
-> <span id="4">对象的解构赋值</span>
+<h2 id="4">对象的解构赋值</h2>
 
 * 对象的属性没有次序，变量名必须与属性同名，才能取到正确的值。
     
@@ -68,7 +68,7 @@ a new understanding about javascript
     ```
 
     
-> <span id="5">函数</span>
+<h2 id="5">函数</h2>
 
 * 参数的解构赋值
 
@@ -163,6 +163,6 @@ a new understanding about javascript
       这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
   
       
-> <span id="6">对象</span>
+<h2 id="6">对象</h2>
   
 *  
