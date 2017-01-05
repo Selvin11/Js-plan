@@ -8,6 +8,7 @@ a new understanding about javascript
 5. [函数](#5)
 6. [对象](#6)
 7. [Symbol](#7)
+8. [Set and Map](#8)
 
 <h2 id="1">1 . Js 基本组成</h2>
 
@@ -164,7 +165,55 @@ a new understanding about javascript
   
       
 <h2 id="6">6 . 对象</h2>
-  
+* 属性和方法的简写
+
+    ```javascript
+      //直接写入变量，变量名自动变为属性名，变量值即为变量本身。
+      var foo = 'bar';
+      var baz = {foo};
+      baz // {foo: "bar"}
+    
+      //方法简写
+      var o = {
+        method() {
+          return "Hello!";
+        }
+      };
+      // 等同于
+      var o = {
+        method: function() {
+          return "Hello!";
+        }
+      };
+    
+      //CommonJS模块输出变量，非常合适使用简洁写法
+      module.exports = { getItem, setItem, clear };
+      // 等同于
+      module.exports = {
+        getItem: getItem,
+        setItem: setItem,
+        clear: clear
+      };
+    ```
+* Object.is(a,b) 
+    
+    判断两个值是否相等，修复了es5中-0与+0相等的问题，以及NaN与NaN自身不等的问题
+* Object.assign(targetobj1,sourceobj2,sourceobj3)
+
+    用于对象的合并，并返回合并之后的对象，属于浅拷贝，基于源对象的引用    
+* Object.getOwnPropertyDescriptor
+
+    对象的每个属性都有一个可描述对象，此方法就是获取该属性的描述对象
+    ```javascript
+      let obj = { foo: 123 };
+      Object.getOwnPropertyDescriptor(obj, 'foo')
+      //  {
+      //    value: 123,
+      //    writable: true,
+      //    enumerable: true,
+      //    configurable: true
+      //  }
+    ```
 <h2 id="7">7 . Symbol</h2> 
 
 * 防止命名冲突
@@ -178,4 +227,21 @@ a new understanding about javascript
       // 这意味着Symbol值可以作为标识符，用于对象的属性名，
       // 就能保证不会出现同名的属性。
       // 这对于一个对象由多个模块构成的情况非常有用，能防止某一个键被不小心改写或覆盖。
+    ```
+    
+<h2 id="8">8 . Set and Map</h2> 
+
+* ES6提供了新的数据结构Set。它类似于数组，但是成员的值都是唯一的，没有重复的值。
+
+* JavaScript的对象（Object），本质上是键值对的集合（Hash结构），但是传统上只能用字符串当作键。
+    
+    ```javascript
+      var data = {};
+      var element = document.getElementById('myDiv');
+      
+      data[element] = 'metadata';
+      data['[object HTMLDivElement]'] // "metadata"
+    
+      上面代码原意是将一个DOM节点作为对象data的键，但是由于对象只接受字符串作为键名，所以element被自动转为字符串[object HTMLDivElement]。
+      为了解决这个问题，ES6提供了Map数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。也就是说，Object结构提供了“字符串—值”的对应，Map结构提供了“值—值”的对应，是一种更完善的Hash结构实现。如果你需要“键值对”的数据结构，Map比Object更合适。
     ```
