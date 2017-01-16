@@ -84,6 +84,77 @@ a new understanding about javascript
     
 <h2 id="5">5. 函数</h2>
 
+* 构造函数： “对象”是单个实物的抽象。通常需要一个模板，表示某一类实物的共同特征，然后“对象”根据这个模板生成。
+        JavaScript语言使用构造函数（constructor）作为对象的模板。
+        构造函数的写法就是一个普通的函数，但是有自己的特征和用法。
+        
+        ```javascript
+          var Vehicle = function (){
+            this.price = 1000;
+          };
+          
+          //通过new命令，让构造函数Vehicle生成一个实例对象，保存在变量v中。
+            这个新生成的实例对象，从构造函数Vehicle继承了price属性。
+            
+          // new 命令执行的操作步骤
+            1.创建一个空对象，作为将要返回的对象实例
+            2.将这个空对象的原型，指向构造函数的prototype属性
+            3.将这个空对象赋值给函数内部的this关键字
+            4.开始执行构造函数内部的代码
+          
+          //若没有添加new命令，则price成为了全局变量，v.price也会报错提示undefined
+          var v = new Vehicle();
+          v.price // 1000
+          
+          function Vehicle(){
+            //防止漏用new命令
+            if (!(this instanceof Vehicle)) {
+              return new Vehicle();
+            }
+          
+            this.price = 1000;
+          }
+        ```
+
+* Function.prototype.call() && Function.prototype.apply() && Function.prototype.apply()
+    
+    第一个参数为函数调用的对象，后面的参数为该函数执行时需要的参数
+    
+    函数.call(obj,argment1,argment2...)
+    
+    函数.apply(obj,[argment1,argment2...])
+    
+    ```javascript
+      var a = ['a', , 'b'];
+      
+      function print(i) {
+        console.log(i);
+      }
+      
+      a.forEach(print)
+      // a
+      // b
+      
+      Array.apply(null, a).forEach(print)
+      // a
+      // undefined
+      // b
+    ```
+    函数.bind(obj,argment1,argment2...)  每运行一次返回一个新函数
+    
+    ```javascript
+    //自定义bind , 防止部分浏览器不支持
+      if(!('bind' in Function.prototype)){
+        Function.prototype.bind = function(){
+          var fn = this;
+          var context = arguments[0];
+          var args = Array.prototype.slice.call(arguments, 1);
+          return function(){
+            return fn.apply(context, args);
+          }
+        }
+      }
+    ```
 * 参数的解构赋值
 
   写法一函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；
@@ -172,14 +243,18 @@ a new understanding about javascript
       // 等同于
       g(3);
     ```
-    * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
+    * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。
+      但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
       
-      这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
+      这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。
+      如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
   
       
 <h2 id="6">6 . 对象</h2>
 
 * 对象：键值对的集合，键名的数据类型均为原始类型（字符串、数字），键值可以为任意数据类型
+
+* 对象的Object()方法： 如果参数是原始类型的值，Object方法返回对应的包装对象的实例，如果Object方法的参数是一个对象，它总是返回原对象。
 
 * 属性和方法的简写
 
