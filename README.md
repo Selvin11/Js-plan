@@ -116,7 +116,7 @@ a new understanding about javascript
           }
         ```
 
-* Function.prototype.call() && Function.prototype.apply() && Function.prototype.apply()
+* Function.prototype.call() && Function.prototype.apply() && Function.prototype.bind()
     
     第一个参数为函数调用的对象，后面的参数为该函数执行时需要的参数
     
