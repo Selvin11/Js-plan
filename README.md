@@ -9,6 +9,7 @@ a new understanding about javascript
 6. [对象](#6)
 7. [Symbol](#7)
 8. [Set and Map](#8)
+9. [浏览器环境](#9)
 
 <h2 id="1">1 . Js 基本组成</h2>
 
@@ -339,3 +340,14 @@ a new understanding about javascript
       也就是说，Object结构提供了“字符串—值”的对应，Map结构提供了“值—值”的对应，是一种更完善的Hash结构实现。
       如果你需要“键值对”的数据结构，Map比Object更合适。
     ```
+    
+<h2 id="8">9 . 浏览器环境</h2>
+
+* script
+* window对象
+* History对象
+* cookie
+* Web Storage
+* AJAX 同源政策 跨域
+* IndexDB
+ 
