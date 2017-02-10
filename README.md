@@ -95,9 +95,11 @@ a new understanding about javascript
       // ['a', 'b']
       ```
     * splice(startIndex,deleteNum,insertElement)
-    * sort() 数组排序，可以加入回调函数控制排序颗粒度
-    * map() 对数组所有成员依次调用一个回调函数，返回新数组，原数组不变
-    * foreach() 同map()，但没有返回值
+    * sort() 数组排序，可以传入回调函数控制排序颗粒度
+    * map() 数组遍历，对数组所有成员依次调用一个回调函数，返回新数组，原数组不变
+    * foreach() 数组遍历同map()，但没有返回值，forEach方法遍历无法中断，即不能加入中断条件，这种情况可以采用for循环，第一个参数为函数，第二个参数为绑定函数的上下文（this指向）
+    * filter() 数组筛选，函数作为参数，返回结果为true的成员组成一个新的数组返回，原数组不变，第一个参数为函数，第二个参数为绑定函数的上下文（this指向）
+
 
 
 
