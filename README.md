@@ -102,9 +102,6 @@ a new understanding about javascript
 
 
 
-
-
-    
 * 数组的解构赋值： 数组的元素是按照次序来排列的，变量的取值由它的位置来决定。
 
     `var [a, b, c] = [1, 2, 3];`
