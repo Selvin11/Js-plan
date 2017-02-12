@@ -19,7 +19,7 @@ a new understanding about javascript
 * 浏览器 API
 * WEB API
 
-<h2 id="2">2 . Js 数据类型 —— 字符串、数值、布尔值、undefined、null、对象、Symbol</h2>
+<h2 id="2">2 . Js 数据类型 —— 字符串、数值、布尔值、undefined、null、对象、数组、函数、Symbol</h2>
 
 * 原始类型 —— 字符串、数值、布尔值
 * 合成类型 ——　对象 （JavaScript的所有数据，都可以视为广义的对象）
