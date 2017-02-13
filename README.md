@@ -11,6 +11,7 @@ a new understanding about javascript
 8. [Set and Map](#8)
 9. [浏览器环境](#9)
 10. [栈与堆](#10)
+
 <h2 id="1">1 . Js 基本组成</h2>
 
 * 基础语法 —— 语法、数据类型、数据类型转换、错误处理机制等
