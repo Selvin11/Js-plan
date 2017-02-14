@@ -109,6 +109,26 @@ a new understanding about javascript
          
 <h2 id="4">4 . 字符串</h2>
 
+* 字符串：可以被视为字符串数组，但无法直接调用数组的方法，可以通过`call()`调用
+
+* 字符集：JavaScript不仅以Unicode储存字符，还允许直接在程序中使用Unicode编号表示字符
+
+* Base64：是一种编码方法，可以将任意字符转成可打印字符
+    
+    JavaScript提供两种原生方法：
+    * btoa()：字符串或二进制值转为Base64编码
+    * atob()：Base64编码转为原来的编码
+* String的一些方法
+
+    * charAt() 返回指定位置的字符
+    * charCodeAt() 返回给定位置字符的Unicode码点
+    * slice(start,end) 从原字符串取出子字符串并返回，不改变原字符串
+    * substr方法用于从原字符串取出子字符串并返回，不改变原字符串。
+      substr方法的第一个参数是子字符串的开始位置，第二个参数是子字符串的长度。
+    * split() 按照给定规则分割字符串，返回一个由分割出来的子字符串组成的数组。
+    * match()：返回一个数组，成员是所有匹配的子字符串。
+    * search()：按照给定的正则表达式进行搜索，返回一个整数，表示匹配开始的位置。
+    * replace()：按照给定的正则表达式进行替换，返回替换后的字符串。
 
 <h2 id="5">5. 函数</h2>
 
@@ -116,7 +136,9 @@ a new understanding about javascript
 
         “对象”是单个实物的抽象。通常需要一个模板，表示某一类实物的共同特征，然后“对象”根据这个模板生成。
         JavaScript语言使用构造函数（constructor）作为对象的模板。
-        构造函数的写法就是一个普通的函数，但是有自己的特征和用法。
+
+        * 函数体内部使用了this关键字，代表了所要生成的对象实例。
+        * 生成对象的时候，必需用new命令，调用函数。
         
         
         ```javascript
@@ -151,9 +173,9 @@ a new understanding about javascript
     
     第一个参数为函数调用的对象，后面的参数为该函数执行时需要的参数
     
-    函数.call(obj,argment1,argment2...)
+    * 函数.call(obj,argment1,argment2...)
     
-    函数.apply(obj,[argment1,argment2...])
+    * 函数.apply(obj,[argment1,argment2...])
     
     ```javascript
       var a = ['a', , 'b'];
@@ -171,7 +193,7 @@ a new understanding about javascript
       // undefined
       // b
     ```
-    函数.bind(obj,argment1,argment2...)  
+    * 函数.bind(obj,argment1,argment2...)  绑定this以外，还可以绑定原函数的参数。
         
         将函数体内的this绑定到指定的对象上
         每运行一次返回一个新函数
@@ -195,6 +217,10 @@ a new understanding about javascript
     * 读取对象属性时，先从本身开始寻找，再向对象原型寻找，逐级向上，直至到Object.prototype，返回null
     * instanceof运算符用来比较一个对象是否为某个构造函数的实例
     * prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数
+
+* prototype ：对象皆有原型prototype属性，通过原型链的追溯，至null对象为止，null对象无原型。
+
+* constructor：对象皆有constructor属性，返回此对象的函数引用，prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数。
     
 * 参数的解构赋值
 
@@ -212,6 +238,7 @@ a new understanding about javascript
           return [x, y];
         }
     ```
+
 * 函数参数的作用域
     ```javascript
       let x = 1;
@@ -224,6 +251,7 @@ a new understanding about javascript
     //函数f传入参数为空，函数内部没有生成变量x，因此指向了全局变量x，如果此时全局环境也没有声明x变量，则会报错
       f() // 1
     ```
+
 * rest 参数
   * `...变量名`，用于获取函数多余的参数，类别es5的arguments对象
   * 扩展运算符 `...`，相当于rest参数的逆运算，将一个数组转为用逗号分隔的参数序列
@@ -295,7 +323,10 @@ a new understanding about javascript
 
 * 对象：键值对的集合，键名的数据类型均为原始类型（字符串、数字），键值可以为任意数据类型
 
-* 对象的Object()方法： 如果参数是原始类型的值，Object方法返回对应的包装对象的实例，如果Object方法的参数是一个对象，它总是返回原对象。
+* 对象的引用：如果不同的变量名指向同一个对象，那么它们都是这个对象的引用，也就是说指向同一个内存地址。
+修改其中一个变量，会影响到其他所有变量。
+
+
 
 * 属性和方法的简写
 
@@ -327,25 +358,38 @@ a new understanding about javascript
         clear: clear
       };
     ```
-* Object.is(a,b) 
-    
-    判断两个值是否相等，修复了es5中-0与+0相等的问题，以及NaN与NaN自身不等的问题
-* Object.assign(targetobj1,sourceobj2,sourceobj3)
 
-    用于对象的合并，并返回合并之后的对象，属于浅拷贝，基于源对象的引用    
-* Object.getOwnPropertyDescriptor
+* 对象的Object()方法： 如果参数是原始类型的值，Object方法返回对应的包装对象的实例，如果Object方法的参数是一个对象，它总是返回原对象。
 
-    对象的每个属性都有一个可描述对象，此方法就是获取该属性的描述对象
-    ```javascript
-      let obj = { foo: 123 };
-      Object.getOwnPropertyDescriptor(obj, 'foo')
-      //  {
-      //    value: 123,
-      //    writable: true,
-      //    enumerable: true,
-      //    configurable: true
-      //  }
-    ```
+    * Object.keys 查看一个对象本身的所有属性
+
+      ```javascript
+        var o = {
+          key1: 1,
+          key2: 2
+        };
+
+        Object.keys(o);
+        // ['key1', 'key2']
+      ```
+
+    * Object.is(a,b) 判断两个值是否相等，修复了es5中-0与+0相等的问题，以及NaN与NaN自身不等的问题
+        
+    * Object.assign(targetobj1,sourceobj2,sourceobj3) 用于对象的合并，并返回合并之后的对象，属于浅拷贝，基于源对象的引用  
+
+    * Object.getOwnPropertyDescriptor
+
+        对象的每个属性都有一个可描述对象，此方法就是获取该属性的描述对象
+        ```javascript
+          let obj = { foo: 123 };
+          Object.getOwnPropertyDescriptor(obj, 'foo')
+          //  {
+          //    value: 123,
+          //    writable: true,
+          //    enumerable: true,
+          //    configurable: true
+          //  }
+        ```
     
 * 对象的解构赋值: 对象的属性没有次序，变量名必须与属性同名，才能取到正确的值。
     
@@ -528,7 +572,16 @@ a new understanding about javascript
         在闭包中，能访问到的变量，仍然是作用域链上能够查询到的变量。
         ```
 
+3. Js内存空间和垃圾回收机制
+    
+    * JavaScript基本上所有数据都保存在堆内存中，但执行上下文则是栈数据的体。
 
+    基础类型的数据都是直接保存在变量对象（也是保存在堆内存）中，是按值访问的，可以直接操作，都是复制独立的；
+
+    引用类型的数据都是保存在堆内存的对象中，在创建变量对象时，保存的是堆内存中对象的引用地址，只能操作其对象的引用，因此当我们要访问堆内存中的引用数据类型时，实际上我们首先是从变量对象中获取了该对象的地址引用（或者地址指针），然后再从堆内存中取得我们需要的数据
+
+    * 垃圾回收机制：通过标记清除的算法，找出不再使用的对象（变量对象或者堆内存中的对象失去引用时），
+    解除引用并释放
 
     
 
