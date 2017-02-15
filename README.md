@@ -11,6 +11,7 @@ a new understanding about javascript
 8. [Set and Map](#8)
 9. [浏览器环境](#9)
 10. [栈与堆](#10)
+11. [继承（object.create()/浅拷贝/深拷贝）](#11)
 
 <h2 id="1">1 . Js 基本组成</h2>
 
@@ -583,5 +584,120 @@ a new understanding about javascript
     * 垃圾回收机制：通过标记清除的算法，找出不再使用的对象（变量对象或者堆内存中的对象失去引用时），
     解除引用并释放
 
-    
 
+
+    
+<h2 id="11">11 . 继承</h2>
+
+* 构造函数的实例对象 && 原生对象 的继承有何不同，以Object.create()方法为例分析
+
+  * 构造函数的实例对象
+
+      ```javascript
+
+        var Chinese = function(){
+            this.nation = '中国';
+        };
+        // 构造函数new生成的实例对象
+        var china = new Chinese();
+
+        // 使用Object.create（）函数原理进行继承
+        function object(o){
+            function F () {};
+            F.prototype = o;
+            return new F();
+        }
+        
+        Doctor = object(china);
+        Doctor 控制台打印如下：
+        //F
+          __proto__:Chinese
+            nation:"中国"
+            __proto__:Object
+              constructor:()
+                arguments:null
+                caller:null
+                length:0
+                name:"Chinese"
+              prototype:Object
+              __proto__:()
+              [[FunctionLocation]]:index.html:22
+              [[Scopes]]:Scopes[1]
+            __proto__:Object
+        
+        Doctor.__proto__ 控制台打印如下：
+        //Chinese
+            nation: "中国"
+            __proto__:Object
+              constructor:()
+                arguments:null
+                caller:null
+                length:0
+                name:"Chinese"
+              prototype:Object
+              __proto__:()
+              [[FunctionLocation]]:index.html:22
+              [[Scopes]]:Scopes[1]
+            __proto__:Object
+      ```
+
+  * 原生对象
+
+      ```javascript
+
+        var Chinese = {
+            nation : '中国';
+        };
+        
+        // 使用Object.create（）函数原理进行继承
+        function object(o){
+            function F () {};
+            F.prototype = o;
+            return new F();
+        }
+        
+        Doctor = object(Chinese);
+        Doctor 控制台打印如下：
+        //F
+          __proto__:Chinese
+            nation:"中国"
+            __proto__:Object
+        
+        Doctor.__proto__ 控制台打印如下：
+        //Object
+            nation: "中国"
+            __proto__:Object
+      ```
+  
+  * 由此可以看出，两者对象继承之后，它们的原型链不同，构造函数生成的实例对象
+    比原生对象多了一层对象实例
+
+* 浅拷贝
+
+  ```javascript
+    　function extendCopy(p) {
+    　　　　var c = {};
+    　　　　for (var i in p) { 
+    　　　　　　c[i] = p[i];
+    　　　　}
+    　　　　c.uber = p;
+    　　　　return c;
+    　　}
+  ```
+
+* 深拷贝
+
+  ```javascript
+      function deepCopy(p, c) {
+      　　　　var c = c || {};
+      　　　　for (var i in p) {
+      　　　　　　if (typeof p[i] === 'object') {
+      　　　　　　　　c[i] = (p[i].constructor === Array) ? [] : {};
+      　　　　　　　　deepCopy(p[i], c[i]);
+      　　　　　　} else {
+      　　　　　　　　　c[i] = p[i];
+      　　　　　　}
+      　　　　}
+      　　　　return c;
+      　　}
+  ```
