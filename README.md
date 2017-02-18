@@ -738,6 +738,7 @@ a new understanding about javascript
       function deepCopy(p, c) {
       　　　　var c = c || {};
       　　　　for (var i in p) {
+                // 当为对象或者数组时对其进行函数递归，即深度拷贝（复制值，非值的地址引用）
       　　　　　　if (typeof p[i] === 'object') {
       　　　　　　　　c[i] = (p[i].constructor === Array) ? [] : {};
       　　　　　　　　deepCopy(p[i], c[i]);
