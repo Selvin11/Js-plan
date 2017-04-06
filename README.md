@@ -27,11 +27,11 @@ a new understanding about javascript
 
 * 原始类型 —— 字符串、数值、布尔值
 * 合成类型 ——　对象 （JavaScript的所有数据，都可以视为广义的对象）
-    
+
     对象分为　——　狭义的对象（仅指Object）、数组、函数
-    
+
 * 运算符
-    
+
     * '+'  : 一般的加法运算以及重载（由于参数不同，而改变自身行为的现象，叫做“重载”）
         ```javascript
           '1' + {foo: 'bar'} // "1[object Object]"
@@ -40,13 +40,13 @@ a new understanding about javascript
           '1' + [1] // "11"
         ```
     * 其余运算符（-、*、/、%等）均将符号右边转换为数值类型进行运算
-      
+
 * this
-    
+
     this返回属性或方法“当前”所在的对象。
 
 * 单线程
-    
+
     一个程序运行之后便称为“进程”，进程中包含程序需要执行的各项任务，形成了任务队列，
     一般采用多线程来处理多项任务，线程中执行任务分为同步和异步。
     * 同步 ： 下一个任务等待上一个任务执行完成之后再执行
@@ -57,12 +57,12 @@ a new understanding about javascript
 * 数组： Js中的数组，是按照顺序排列的一组值，索引为0开始的数字，索引值可以为任意数据类型
 * 数组的方法：
     * valueOf() 
-    
+
         ```
         [1,2].valueOf() // [1,2] 返回本身
         ```
     * toString()
-    
+
         ```
         [1, 2, 3, [4, 5, 6]].toString() // "1,2,3,4,5,6" 返回字符串
         ```
@@ -109,7 +109,7 @@ a new understanding about javascript
 * 数组的解构赋值： 数组的元素是按照次序来排列的，变量的取值由它的位置来决定（模式匹配）。
     匹配失败，返回`undefined`
     `var [a, b, c] = [1, 2, 3];`
-         
+    ​     
 <h2 id="4">4 . 字符串</h2>
 
 * 字符串：可以被视为字符串数组，但无法直接调用数组的方法，可以通过`call()`调用
@@ -117,7 +117,7 @@ a new understanding about javascript
 * 字符集：JavaScript不仅以Unicode储存字符，还允许直接在程序中使用Unicode编号表示字符
 
 * Base64：是一种编码方法，可以将任意字符转成可打印字符
-    
+
     JavaScript提供两种原生方法：
     * btoa()：字符串或二进制值转为Base64编码
     * atob()：Base64编码转为原来的编码
@@ -139,12 +139,12 @@ a new understanding about javascript
 
         “对象”是单个实物的抽象。通常需要一个模板，表示某一类实物的共同特征，然后“对象”根据这个模板生成。
         JavaScript语言使用构造函数（constructor）作为对象的模板。
-
+        
         * 函数体内部使用了this关键字，代表了所要生成的对象实例。
         * 生成对象的时候，必需用new命令，调用函数。
-        
-        
-        ```javascript
+
+
+        ​```javascript
           var Vehicle = function (){
             this.price = 1000;
           };
@@ -154,12 +154,12 @@ a new understanding about javascript
             2.将这个空对象的原型，指向构造函数的prototype属性
             3.将这个空对象赋值给函数内部的this关键字
             4.开始执行构造函数内部的代码
-
+        
           //通过new命令，让构造函数Vehicle生成一个实例对象，保存在变量v中。
             这个新生成的实例对象，从构造函数Vehicle继承了price属性。
-
+        
           //若没有添加new命令，则price成为了全局变量，v.price也会报错提示undefined
-
+        
           var v = new Vehicle();
           v.price // 1000
           
@@ -171,16 +171,16 @@ a new understanding about javascript
           
             this.price = 1000;
           }
-        ```
+        ​```
 
 * Function.prototype.call() && Function.prototype.apply() && Function.prototype.bind()
-    
+
     第一个参数为函数调用的对象，后面的参数为该函数执行时需要的参数
-    
+
     * 函数.call(obj,argment1,argment2...)
-    
+
     * 函数.apply(obj,[argment1,argment2...])
-    
+
     ```javascript
       var a = ['a', , 'b'];
       
@@ -198,10 +198,10 @@ a new understanding about javascript
       // b
     ```
     * 函数.bind(obj,argment1,argment2...)  绑定this以外，还可以绑定原函数的参数。
-        
+
         将函数体内的this绑定到指定的对象上
         每运行一次返回一个新函数
-    
+
     ```javascript
     //自定义bind , 防止部分浏览器不支持
       if(!('bind' in Function.prototype)){
@@ -215,9 +215,9 @@ a new understanding about javascript
         }
       }
     ```
-    
+
     prototype 原型链 
-    
+
     * 读取对象属性时，先从本身开始寻找，再向对象原型寻找，逐级向上，直至到Object.prototype，返回null
     * instanceof运算符用来比较一个对象是否为某个构造函数的实例
     * prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数
@@ -225,12 +225,12 @@ a new understanding about javascript
 * prototype ：对象皆有原型prototype属性，通过原型链的追溯，至null对象为止，null对象无原型。
 
 * constructor：对象皆有constructor属性，返回此对象的函数引用，prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数。
-    
+
 * 参数的解构赋值
 
   写法一函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；
   写法二函数参数的默认值是一个有具体属性的对象，但是没有设置对象解构赋值的默认值。
-    
+
     ```javascript
         // 写法一
         function m1({x = 0, y = 0} = {}) {
@@ -273,9 +273,9 @@ a new understanding about javascript
         //上面代码的ES5写法中，push方法的参数不能是数组，所以只好通过apply方法变通使用push方法。
         // 有了扩展运算符，就可以直接将数组传入push方法。
     ```
-    
+
 * 函数的length属性
-    
+
     * 指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
 
 * 箭头函数
@@ -285,17 +285,17 @@ a new understanding about javascript
       var getTempItem = id => ({ id: id, name: "Temp" });
     ```
     箭头函数有几个使用注意点。(箭头函数里面根本没有自己的this，而是引用外层的this。)
-    
+
     （1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
-    
+
     （2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
-    
+
     （3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用Rest参数代替。 
-    
+
     （4）不可以使用yield命令，因此箭头函数不能用作Generator函数。
 
 * 函数尾递归
-    
+
     * 函数调用时，会在内存中形成一个“调用记录”（调用帧），保存调用位置和调用变量等信息。
     * 如果在函数A的内部调用函数B，那么在A的调用帧上方，还会形成一个B的调用帧。等到B运行结束，将结果返回到A，B的调用帧才会消失。如果函数B内部还调用函数C，那就还有一个C的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）。
     * 尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了。
@@ -318,17 +318,17 @@ a new understanding about javascript
     ```
     * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。
       但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
-      
+
       这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。
       如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
-  
-      
+
+
 <h2 id="6">6 . 对象</h2>
 
 * 对象：键值对的集合，键名的数据类型均为原始类型（字符串、数字），键值可以为任意数据类型
 
 * 对象的引用：如果不同的变量名指向同一个对象，那么它们都是这个对象的引用，也就是说指向同一个内存地址。
-修改其中一个变量，会影响到其他所有变量。
+  修改其中一个变量，会影响到其他所有变量。
 
 
 
@@ -339,7 +339,7 @@ a new understanding about javascript
       var foo = 'bar';
       var baz = {foo};
       baz // {foo: "bar"}
-    
+
       //方法简写
       var o = {
         method() {
@@ -352,7 +352,7 @@ a new understanding about javascript
           return "Hello!";
         }
       };
-    
+
       //CommonJS模块输出变量，非常合适使用简洁写法
       module.exports = { getItem, setItem, clear };
       // 等同于
@@ -378,7 +378,7 @@ a new understanding about javascript
       ```
 
     * Object.is(a,b) 判断两个值是否相等，修复了es5中-0与+0相等的问题，以及NaN与NaN自身不等的问题
-        
+
     * Object.assign(targetobj1,sourceobj2,sourceobj3) 用于对象的合并，并返回合并之后的对象，属于浅拷贝，基于源对象的引用  
 
     * Object.getOwnPropertyDescriptor
@@ -394,9 +394,9 @@ a new understanding about javascript
           //    configurable: true
           //  }
         ```
-    
+
 * 对象的解构赋值: 对象的属性没有次序，变量名必须与属性同名，才能取到正确的值。
-    
+
     ```javascript
       //简写形态
       var { foo, bar } = { foo: "aaa", bar: "bbb" };
@@ -405,7 +405,7 @@ a new understanding about javascript
       //原始形态
       var { foo: foo, bar: bar } = { foo: "aaa", bar: "bbb" };
       // foo 是匹配的模式 ， foo：后的foo才是变量，真正被赋值的是变量
-    
+
       //嵌套模式下的对象解构 (对象中的对象（狭义对象，数组，函数）)
       var obj = {
         p: [
@@ -433,20 +433,20 @@ a new understanding about javascript
       // 就能保证不会出现同名的属性。
       // 这对于一个对象由多个模块构成的情况非常有用，能防止某一个键被不小心改写或覆盖。
     ```
-    
+
 <h2 id="8">8 . Set and Map</h2> 
 
 * ES6提供了新的数据结构Set。它类似于数组，但是成员的值都是唯一的，没有重复的值。
 
 * JavaScript的对象（Object），本质上是键值对的集合（Hash结构），但是传统上只能用字符串当作键。
-    
+
     ```javascript
       var data = {};
       var element = document.getElementById('myDiv');
       
       data[element] = 'metadata';
       data['[object HTMLDivElement]'] // "metadata"
-    
+
       上面代码原意是将一个DOM节点作为对象data的键，但是由于对象只接受字符串作为键名，所以element被自动转为字符串[object HTMLDivElement]。
       为了解决这个问题，ES6提供了Map数据结构。
       它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
@@ -472,7 +472,7 @@ a new understanding about javascript
 * 堆 ：水平放置于书架上的书，书架 => 书 （key=>value），堆的存取方式 根据书名取出此书即可，无序
 
 * Js代码逐行执行时，执行上下文（当前代码的执行环境（1.全局上下文；2.当前函数上下文；3.eval()））进出栈详解：
-    
+
     首先全局上下文入栈，其次遇到函数时，当前函数执行上下文入栈，
     函数中又遇到函数，继续将当前函数执行上下文入栈，以此类推
     直至全部函数执行完毕，
@@ -486,9 +486,9 @@ a new understanding about javascript
     * 每次某个函数被调用，就会有个新的执行上下文为其创建，即使是调用的自身函数，也是如此。
 
 * 执行上下文都干了什么：
-    
+
     简单描述：进入执行上下文后，首先创建变量对象，函数声明提升，变量声明（有值则跳过，无值则undefined），接着进入执行阶段，变量对象变为活动对象，活动对象中的属性及属性值能够访问，开始逐行执行代码，完成相关操作。
-    
+
     当调用一个函数时（激活），一个新的执行上下文就会被创建。而一个执行上下文的生命周期可以分为两个阶段。
 
     1. 创建阶段：在这个阶段中，执行上下文会分别创建`变量对象`，建立`作用域链`，以及确定`this的指向`
@@ -529,45 +529,46 @@ a new understanding about javascript
             this: {}
         }
         ```
-    
+
     * this指向：是在函数被调用的时候确定的。
       **当函数调用时不被对象（非全局对象）拥有时，则此函数为独立调用，在严格模式下this指向undefined**
       * 全局对象中的this：指向全局对象本身
       * 对象属性中的this：此处特指对象在全局声明，this在非严格模式指向全局对象，严格模式指向undefined
       * 函数中的this：
-      在一个函数上下文中，this由调用者提供，由调用函数的方式来决定。
-      如果调用者函数，被某一个对象所拥有，那么该函数在调用时，内部的this指向该对象。
-      如果函数独立调用，那么该函数内部的this，则指向undefined。
-      但是在非严格模式中，当this指向undefined时，它会被自动指向全局对象。
+          在一个函数上下文中，this由调用者提供，由调用函数的方式来决定。
+          如果调用者函数，被某一个对象所拥有，那么该函数在调用时，内部的this指向该对象。
+          如果函数独立调用，那么该函数内部的this，则指向undefined。
+          但是在非严格模式中，当this指向undefined时，它会被自动指向全局对象。
 
-          ```javascript
-              // 为了能够准确判断，我们在函数内部使用严格模式，因为非严格模式会自动指向全局
-              function fn() {
-                  'use strict';
-                  console.log(this);
-              }
-    
-              fn();  // fn是调用者，独立调用
-              window.fn();  // fn是调用者，被window所拥有
-          ``` 
+            ```javascript
+                // 为了能够准确判断，我们在函数内部使用严格模式，因为非严格模式会自动指向全局
+                function fn() {
+                    'use strict';
+                    console.log(this);
+                }
+
+                fn();  // fn是独立调用
+                window.fn();  // fn被window对象（window执行上下文中的变量对象）所拥有，非独立调用
+            ```
 
       * **函数中声明的对象中的this**
 
           ```javascript 
               'use strict';
-              // 严格模式 函数内声明的对象的属性（非函数）中的this指向undefined
+              // 当obj在全局声明时，无论obj.c在什么地方调用，这里的this都指向全局对象，
+              // 而当obj在函数环境中声明时，这个this指向undefined，在非严格模式下，会自动转向全局对象
               var a = 20;
               function foo () {
                   var a = 1;
                   var obj = {
                       a: 10, 
-                      c: this.a + 20,
+                      c: this.a + 20, // this指向undefined，严格模式下报错
                       fn: function () {
                           return this.a;
                       }
                   }
                   return obj.c;
-    
+
               }
               console.log(foo()); // 运行会报错
           ```
@@ -579,7 +580,7 @@ a new understanding about javascript
 
 
 * 作用域和闭包
-    
+
 1. 作用域：
 
     * 在JavaScript中，我们可以将作用域定义为一套规则,这套规则用来管理引擎如何在当前作用域以及嵌套的子作用域中根据标识符名称（变量名或者函数名）进行变量查找。
@@ -592,9 +593,8 @@ a new understanding about javascript
     编译阶段由编译器完成，将代码翻译成可执行代码，这个阶段作用域规则会确定。
     执行阶段由引擎完成，主要任务是执行可执行代码，执行上下文在这个阶段创建。
 
-    
 2. 闭包：当一个函数可以记住并访问所在的作用域（全局作用域除外），并在定义该函数的作用域之外执行时，该函数就可以称之为一个闭包。（假设函数A在函数B的内部进行定义了，并在函数B的作用域之外执行（不管是上层作用域，下层作用域，还有其他作用域），那么A就是一个闭包）
-    
+
         ```javascript
         var fn = null;
         function foo() {
@@ -604,11 +604,11 @@ a new understanding about javascript
             }
             fn = innnerFoo; // 将 innnerFoo的引用，赋值给全局变量中的fn
         }
-
+       
         function bar() {
             fn(); // 此处的保留的innerFoo的引用
         }
-
+       
         foo();
         bar(); // 2
         //foo()执行完毕之后，按照常理，其执行环境生命周期会结束，所占内存被垃圾收集器释放。
@@ -616,15 +616,15 @@ a new understanding about javascript
         这个行为，导致了foo的变量对象，也被保留了下来。
         于是，函数fn在函数bar内部执行时，依然可以访问这个被保留下来的变量对象。
         所以此刻仍然能够访问到变量a的值。
-
+       
         //这样，我们就可以称fn为闭包。(fn本身的执行环境实在foo的函数上下文，实际的执行环境是在bar函数的上下文)
-
+       
         虽然例子中的闭包被保存在了全局变量中，但是闭包的作用域链并不会发生任何改变。
         在闭包中，能访问到的变量，仍然是作用域链上能够查询到的变量。
         ```
 
 * Js内存空间和垃圾回收机制
-    
+
     * JavaScript基本上所有数据都保存在堆内存中，但执行上下文则是栈数据的体。
 
     基础类型的数据都是直接保存在变量对象（也是保存在堆内存）中，是按值访问的，可以直接操作，都是复制独立的；
@@ -632,11 +632,11 @@ a new understanding about javascript
     引用类型的数据都是保存在堆内存的对象中，在创建变量对象时，保存的是堆内存中对象的引用地址，只能操作其对象的引用，因此当我们要访问堆内存中的引用数据类型时，实际上我们首先是从变量对象中获取了该对象的地址引用（或者地址指针），然后再从堆内存中取得我们需要的数据
 
     * 垃圾回收机制：通过标记清除的算法，找出不再使用的对象（变量对象或者堆内存中的对象失去引用时），
-    解除引用并释放
+      解除引用并释放
 
 
 
-    
+​    
 <h2 id="11">11 . 继承</h2>
 
 * 构造函数的实例对象 && 原生对象 的继承有何不同，以Object.create()方法为例分析
@@ -718,7 +718,7 @@ a new understanding about javascript
             nation: "中国"
             __proto__:Object
       ```
-  
+
   * 由此可以看出，两者对象继承之后，它们的原型链不同，构造函数生成的实例对象
     比原生对象多了一层对象实例
 
