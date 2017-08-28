@@ -1,8 +1,9 @@
-# Js-plan
-a new understanding about javascript
+## Js-plan
+A new understanding about javascript
 
 1. [Js基本组成](#1)
 2. [数据类型](#2)
+3. [运算符](#operate)
 3. [数组](#3)
 4. [字符串](#4)
 5. [函数](#5)
@@ -15,7 +16,9 @@ a new understanding about javascript
 12. [let && const](#12)
 13. [解构赋值](#13)
 
-<h2 id="1">1 . Js 基本组成</h2>
+
+---
+#### <a name="1">一 . Js 基本组成</a>
 
 * 基础语法 —— 语法、数据类型、数据类型转换、错误处理机制等
 * 标准库 ——　各类广义对象及其携带的属性、方法
@@ -23,27 +26,28 @@ a new understanding about javascript
 * 浏览器 API
 * WEB API
 
-<h2 id="2">2 . Js 数据类型 —— 字符串、数值、布尔值、undefined、null、对象、数组、函数、Symbol</h2>
+---
+<h2 id="2">二 . Js 数据类型 </h2>
+> 字符串、数值、布尔值、undefined、null、对象、数组、函数、Symbol
+1. 原始类型 —— 字符串、数值、布尔值
+2. 合成类型 —— 对象（JavaScript的所有数据，都可以视为广义的对象）
+  对象分为 —— 狭义的对象（仅指Object）、数组、函数
 
-* 原始类型 —— 字符串、数值、布尔值
-* 合成类型 ——　对象 （JavaScript的所有数据，都可以视为广义的对象）
+---
+#### <a name="operate">三. 运算符</a>
+  * '+'  : 一般的加法运算以及重载（由于参数不同，而改变自身行为的现象，叫做“重载”）
+      ```javascript
+        '1' + {foo: 'bar'} // "1[object Object]"
+        '1' + 1 // "11"
+        '1' + true // "1true"
+        '1' + [1] // "11"
+      ```
+  * 其余运算符（-、*、/、%等）均将符号右边转换为数值类型进行运算
 
-    对象分为　——　狭义的对象（仅指Object）、数组、函数
+---
+#### <a name="this">三. this</a>
 
-* 运算符
-
-    * '+'  : 一般的加法运算以及重载（由于参数不同，而改变自身行为的现象，叫做“重载”）
-        ```javascript
-          '1' + {foo: 'bar'} // "1[object Object]"
-          '1' + 1 // "11"
-          '1' + true // "1true"
-          '1' + [1] // "11"
-        ```
-    * 其余运算符（-、*、/、%等）均将符号右边转换为数值类型进行运算
-
-* this
-
-    this返回属性或方法“当前”所在的对象。
+  * this返回属性或方法“当前”所在的对象。
 
 * 单线程
 
@@ -110,7 +114,7 @@ a new understanding about javascript
     匹配失败，返回`undefined`
     `var [a, b, c] = [1, 2, 3];`
     ​     
-<h2 id="4">4 . 字符串</h2>
+    <h2 id="4">4 . 字符串</h2>
 
 * 字符串：可以被视为字符串数组，但无法直接调用数组的方法，可以通过`call()`调用
 
