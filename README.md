@@ -18,6 +18,9 @@ A new understanding about javascript
 15. [浅拷贝/深拷贝](#copy)
 16. [let && const](#let)
 17. [解构赋值](#Destructuring_assignment)
+18. [Iterator](#Iterator)
+19. [Generator](#Generator)
+20. [async](#async)
 
 
 ---
@@ -728,14 +731,14 @@ A new understanding about javascript
 * 浅拷贝
 
   ```javascript
-　 function extendCopy(p) {
-　　　　var c = {};
-　　　　for (var i in p) { 
-　　　　　　c[i] = p[i];
-　　　　}
-　　　　c.uber = p;
-　　　　return c;
-　　}
+  function extendCopy(p) {
+    var c = {};
+    for (var i in p) { 
+      c[i] = p[i];
+    }
+    c.uber = p;
+    return c;
+  }
   ```
 
 * 深拷贝
@@ -802,3 +805,93 @@ A new understanding about javascript
 * 记住赋值顺序，右边的值赋给左边定义的变量
 * 可使用默认值
 * 数据类型间的解构赋值稍有差异，具体参照上面的分类进行查看
+
+---
+#### <a name="Iterator">十八. Iterator</a>​
+
+1. Iterator的作用：
+  * 为各种数据结构，提供一个统一的、简便的访问接口；
+  * 使得数据结构的成员能够按某种次序排列；
+  * ES6创造了一种新的遍历命令for...of循环，Iterator接口主要供for...of消费。
+
+2. Iterator的遍历过程：
+
+（1）创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象。
+
+（2）第一次调用指针对象的next方法，可以将指针指向数据结构的第一个成员。
+
+（3）第二次调用指针对象的next方法，指针就指向数据结构的第二个成员。
+
+（4）不断调用指针对象的next方法，直到它指向数据结构的结束位置。
+
+3. 默认
+  * Iterator 接口的目的，就是为所有数据结构，提供了一种统一的访问机制，即for...of循环。当使用for...of循环遍历某种数据结构时，该循环会自动去寻找 Iterator 接口。
+
+  * 一种数据结构只要部署了 Iterator 接口，我们就称这种数据结构是”可遍历的“（iterable）。
+
+  * ES6 规定，默认的 Iterator 接口部署在数据结构的Symbol.iterator属性，或者说，一个数据结构只要具有Symbol.iterator属性，就可以认为是“可遍历的”（iterable）。Symbol.iterator属性本身是一个函数，就是当前数据结构默认的遍历器生成函数。执行这个函数，就会返回一个遍历器。至于属性名Symbol.iterator，它是一个表达式，返回Symbol对象的iterator属性，这是一个预定义好的、类型为 Symbol 的特殊值，所以要放在方括号内。
+
+  * 原生具备 Iterator 接口的数据结构如下
+
+    * Array
+    * Map
+    * Set
+    * String
+    * TypedArray
+    * 函数的 arguments 对象
+    * NodeList 对象
+
+
+---
+#### <a name="Generator">十九. Generator</a>​
+
+1. 定义：Generator 函数除了状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态。
+
+2. 执行器：用于 Generator 函数的自动流程管理。
+
+---
+#### <a name="asnyc">二十. asnyc</a>​
+
+1. 简介：简化异步操作而生，Generator函数的语法糖。
+  
+  * 内置执行器
+  * 更好的语义：async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。
+  * 更广的适用性：co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而async函数的await命令后面，可以是Promise 对象和原始类型的值（数值、字符串和布尔值，但这时等同于同步操作）。
+  * 返回值是Promise
+
+2. 语法
+  * 返回Promise对象：async函数返回一个 Promise 对象，async函数内部return语句返回的值，会成为then方法回调函数的参数。
+  * Promise 对象的状态变化
+    * async函数返回的 Promise 对象，必须等到内部所有await命令后面的 Promise 对象执行完，才会发生状态改变，除非遇到return语句或者抛出错误。
+    * 也就是说，只有async函数内部的异步操作执行完，才会执行then方法指定的回调函数。
+  * await 命令
+    * 正常情况下，await命令后面是一个 Promise 对象。如果不是，会被转成一个立即resolve的 Promise 对象。
+    * 只要一个await语句后面的 Promise 变为reject，那么整个async函数都会中断执行。
+
+3. 实例
+  * 依次远程读取一组 URL，然后按照读取的顺序输出结果。
+
+      ```javascript
+      async function logInOrder(urls) {
+        for (const url of urls) {
+          const response = await fetch(url);
+          console.log(await response.text());
+        }
+        // 所有请求间属于继发关系，请求需要并发执行，输出按照顺序即可
+      }
+      ```
+      改造版：虽然map方法的参数是async函数，但它是并发执行的，因为只有async函数内部是继发执行，外部不受影响。后面的for..of循环内部使用了await，因此实现了按顺序输出。
+      ```javascript
+      async function logInOrder(urls) {
+        // 并发读取远程URL
+        const textPromises = urls.map(async url => {
+          const response = await fetch(url);
+          return response.text();
+        });
+
+        // 按次序输出
+        for (const textPromise of textPromises) {
+          console.log(await textPromise);
+        }
+      }
+      ```
