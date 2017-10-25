@@ -229,9 +229,20 @@ A new understanding about javascript
     * instanceof运算符用来比较一个对象是否为某个构造函数的实例
     * prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数
 
-3. prototype ：由于 JavaScript 的所有对象都有构造函数（只有null除外），而所有构造函数都有prototype属性（其实是所有函数都有prototype属性），所以所有对象都有自己的原型对象。
+3. prototype ：由于 JavaScript 的所有对象都有构造函数（只有null除外），而所有构造函数都有prototype属性（其实是所有函数都有prototype属性），所以所有对象都有自己的原型对象。**prototype 属性指向了构造函数创建的实例的原型，浏览器中的__proto__（每一个对象都有的属性，除去null）指向对象的原型。**
 
 4. constructor：对象皆有constructor属性，返回此对象的函数引用，prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数。
+
+```javascript
+// 关于prototype，原型，浏览器中的__proto__属性之间的关联
+// 首先定义一个Person构造函数
+var Person = function () {
+
+}
+var selvin = new Person()
+// Person的prototype属性指向与Person实例selvin指向同一原型
+Person.prototype === selvin.__proto__  // true
+```
 
 5. 参数的解构赋值
 
