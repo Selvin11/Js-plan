@@ -244,6 +244,8 @@ var selvin = new Person()
 Person.prototype === selvin.__proto__  // true
 ```
 
+![Js原型](./Js原型.png)
+
 5. 参数的解构赋值
 
   写法一函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；
@@ -264,7 +266,7 @@ Person.prototype === selvin.__proto__  // true
 6. 函数参数的作用域
   ```javascript
   let x = 1;
-  
+
   function f(y = x) {
     let x = 2;
     console.log(y);
@@ -283,12 +285,12 @@ Person.prototype === selvin.__proto__  // true
     var arr1 = [0, 1, 2];
     var arr2 = [3, 4, 5];
     Array.prototype.push.apply(arr1, arr2);
-    
+
     // ES6的写法
     var arr1 = [0, 1, 2];
     var arr2 = [3, 4, 5];
     arr1.push(...arr2);
-    
+
     //上面代码的ES5写法中，push方法的参数不能是数组，所以只好通过apply方法变通使用push方法。
     // 有了扩展运算符，就可以直接将数组传入push方法。
     ```
@@ -315,32 +317,32 @@ Person.prototype === selvin.__proto__  // true
 
 10. 函数尾递归
 
-    * 函数调用时，会在内存中形成一个“调用记录”（调用帧），保存调用位置和调用变量等信息。
-    * 如果在函数A的内部调用函数B，那么在A的调用帧上方，还会形成一个B的调用帧。等到B运行结束，将结果返回到A，B的调用帧才会消失。如果函数B内部还调用函数C，那就还有一个C的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）。
-    * 尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了。
+   * 函数调用时，会在内存中形成一个“调用记录”（调用帧），保存调用位置和调用变量等信息。
+   * 如果在函数A的内部调用函数B，那么在A的调用帧上方，还会形成一个B的调用帧。等到B运行结束，将结果返回到A，B的调用帧才会消失。如果函数B内部还调用函数C，那就还有一个C的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）。
+   * 尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了。
 
-      ```javascript
-      function f() {
-        let m = 1;
-        let n = 2;
-        return g(m + n);
-      }
-      f();
-      
-      // 等同于
-      function f() {
-        return g(3);
-      }
-      f();
-      
-      // 等同于
-      g(3);
-      ```
-    * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。
-      但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
+     ```javascript
+     function f() {
+       let m = 1;
+       let n = 2;
+       return g(m + n);
+     }
+     f();
 
-      这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。
-      如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
+     // 等同于
+     function f() {
+       return g(3);
+     }
+     f();
+
+     // 等同于
+     g(3);
+     ```
+   * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。
+     但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
+
+     这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。
+     如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
 
 ---
 #### <a name="object">九. 对象</a>
@@ -443,7 +445,7 @@ Person.prototype === selvin.__proto__  // true
 
   ```javascript
   let s = Symbol();
-  
+
   typeof s
   // "symbol"
   //由于每一个Symbol值都是不相等的，
@@ -462,7 +464,7 @@ Person.prototype === selvin.__proto__  // true
   ```javascript
   var data = {};
   var element = document.getElementById('myDiv');
-  
+
   data[element] = 'metadata';
   data['[object HTMLDivElement]'] // "metadata"
 
@@ -621,11 +623,11 @@ Person.prototype === selvin.__proto__  // true
       }
       fn = innnerFoo; // 将 innnerFoo的引用，赋值给全局变量中的fn
   }
-  
+
   function bar() {
       fn(); // 此处的保留的innerFoo的引用
   }
-  
+
   foo();
   bar(); // 2
   //foo()执行完毕之后，按照常理，其执行环境生命周期会结束，所占内存被垃圾收集器释放。
@@ -633,9 +635,9 @@ Person.prototype === selvin.__proto__  // true
   //这个行为，导致了foo的变量对象，也被保留了下来。
   //于是，函数fn在函数bar内部执行时，依然可以访问这个被保留下来的变量对象。
   //所以此刻仍然能够访问到变量a的值。
-  
+
   //这样，我们就可以称fn为闭包。(fn本身的执行环境实在foo的函数上下文，实际的执行环境是在bar函数的上下文)
-  
+
   //虽然例子中的闭包被保存在了全局变量中，但是闭包的作用域链并不会发生任何改变。
   //在闭包中，能访问到的变量，仍然是作用域链上能够查询到的变量。
   ```
@@ -671,7 +673,7 @@ Person.prototype === selvin.__proto__  // true
           F.prototype = o;
           return new F();
       }
-      
+
       Doctor = object(china);
       Doctor 控制台打印如下：
       //F
@@ -688,7 +690,7 @@ Person.prototype === selvin.__proto__  // true
             [[FunctionLocation]]:index.html:22
             [[Scopes]]:Scopes[1]
           __proto__:Object
-      
+
       Doctor.__proto__ 控制台打印如下：
       //Chinese
           nation: "中国"
@@ -799,7 +801,6 @@ Person.prototype === selvin.__proto__  // true
   3. 本质：`const`声明后的变量，其实是保证变量保存在内存中的地址不得改变或被引用，因此实现了值不得更改
 
 
-
 ---
 #### <a name="Destructuring_assignment">十七. 解构赋值</a>​  
 
@@ -864,7 +865,7 @@ Person.prototype === selvin.__proto__  // true
 #### <a name="asnyc">二十. asnyc</a>​
 
 1. 简介：简化异步操作而生，Generator函数的语法糖。
-  
+
   * 内置执行器
   * 更好的语义：async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。
   * 更广的适用性：co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而async函数的await命令后面，可以是Promise 对象和原始类型的值（数值、字符串和布尔值，但这时等同于同步操作）。
