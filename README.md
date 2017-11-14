@@ -13,7 +13,7 @@ A new understanding about javascript
 10. [Symbol](#Symbol)
 11. [Set and Map](#Set)
 12. [浏览器环境](#browser)
-13. [栈与堆](#stack)
+13. [栈与堆-执行上下文-作用域和闭包](#stack)
 14. [继承](#extend)
 15. [浅拷贝/深拷贝](#copy)
 16. [let && const](#let)
@@ -54,6 +54,63 @@ A new understanding about javascript
 
 ---
 #### <a name="this">四. this</a>
+
+1. ECMAScript5规范
+  
+  * ECMAScript 的类型分为语言类型和规范类型（只存在于规范中的类型，它们的作用是用来描述语言底层行为逻辑）。
+
+  * ECMAScript 语言类型是开发者直接使用 ECMAScript 可以操作的。其实就是我们常说的Undefined, Null, Boolean, String, Number, 和 Object。
+
+  而规范类型相当于 meta-values，是用来用算法描述 ECMAScript 语言结构和 ECMAScript 语言类型的。规范类型包括：**Reference**, List, Completion, Property Descriptor, Property Identifier, Lexical Environment, 和 Environment Record。
+
+  Reference类型便于this息息相关。
+
+2. Reference类型
+
+  * 定义：Reference 类型就是用来解释诸如 delete、typeof 以及赋值等操作行为的，Reference 是一个 Specification Type，也就是 “只存在于规范里的抽象类型”。它们是为了更好地描述语言的底层行为逻辑才存在的，但并不存在于实际的 js 代码中。
+
+  * Reference构成部分：
+    
+    * base value：就是属性所在的对象或者就是 EnvironmentRecord，它的值只可能是 undefined, an Object, a Boolean, a String, a Number, or an environment record 其中的一种。
+    * referenced name：就是属性的名称
+    * strict reference
+  
+  * 规范中还提供了获取 Reference 组成部分的方法，比如 GetBase （**返回 reference 的 base value**）和 IsPropertyRefere（**如果 base value 是一个对象，就返回true**）
+
+  * GetValue：用于从 Reference 类型获取对应值的方法，**调用 GetValue，返回的将是具体的值，而不再是一个 Reference**。
+
+  ```javascript
+  var foo = 1;
+  var fooReference = {
+      base: EnvironmentRecord,
+      name: 'foo',
+      strict: false
+  };
+
+  GetValue(fooReference) // 1;
+  ```
+
+  * 如何确定this的值
+
+    * 计算 MemberExpression 的结果赋值给 ref
+
+      MemberExpression : 简单理解 MemberExpression 其实就是()左边的部分。
+
+      PrimaryExpression // 原始表达式 可以参见《JavaScript权威指南第四章》
+      FunctionExpression // 函数定义表达式
+      MemberExpression [ Expression ] // 属性访问表达式
+      MemberExpression . IdentifierName // 属性访问表达式
+      new MemberExpression Arguments // 对象创建表达式
+
+    * 判断 ref 是不是一个 Reference 类型
+
+      * 1 如果 ref 是 Reference，并且 IsPropertyReference(ref) 是 true, 那么 this 的值为 GetBase(ref)
+
+      * 2 如果 ref 是 Reference，并且 base value 值是 Environment Record, 那么this的值为 ImplicitThisValue(ref)(**该函数始终返回 undefined**)
+
+      * 3 如果 ref 不是 Reference，那么 this 的值为 undefined
+    
+    
 
   * this返回属性或方法“当前”所在的对象。
 
@@ -182,52 +239,53 @@ A new understanding about javascript
     ​
 2. Function.prototype.call() && Function.prototype.apply() && Function.prototype.bind()
 
-    第一个参数为函数调用的对象，后面的参数为该函数执行时需要的参数
+  第一个参数为函数调用的对象，后面的参数为该函数执行时需要的参数
 
-    * 函数.call(obj,argment1,argment2...)
+  * 函数.call(obj,argment1,argment2...)
 
-    * 函数.apply(obj,[argment1,argment2...])
+  * 函数.apply(obj,[argment1,argment2...])
 
-    ```javascript
-      var a = ['a', , 'b'];
-      
-      function print(i) {
-        console.log(i);
-      }
-      
-      a.forEach(print)
-      // a
-      // b
-      
-      Array.apply(null, a).forEach(print)
-      // a
-      // undefined
-      // b
-    ```
-    * 函数.bind(obj,argment1,argment2...)  绑定this以外，还可以绑定原函数的参数。
+  ```javascript
+    var a = ['a', , 'b'];
+    
+    function print(i) {
+      console.log(i);
+    }
+    
+    a.forEach(print)
+    // a
+    // b
+    
+    Array.apply(null, a).forEach(print)
+    // a
+    // undefined
+    // b
+  ```
+  * 函数.bind(obj,argment1,argment2...)  绑定this以外，还可以绑定原函数的参数。
 
-        将函数体内的this绑定到指定的对象上
-        每运行一次返回一个新函数
+    将函数体内的this绑定到指定的对象上
 
-    ```javascript
-    //自定义bind , 防止部分浏览器不支持
-      if(!('bind' in Function.prototype)){
-        Function.prototype.bind = function(){
-          var fn = this;
-          var context = arguments[0];
-          var args = Array.prototype.slice.call(arguments, 1);
-          return function(){
-            return fn.apply(context, args);
-          }
+    每运行一次返回一个新函数
+
+  ```javascript
+  //自定义bind , 防止部分浏览器不支持
+    if(!('bind' in Function.prototype)){
+      Function.prototype.bind = function(){
+        var fn = this;
+        var context = arguments[0];
+        var args = Array.prototype.slice.call(arguments, 1);
+        return function(){
+          return fn.apply(context, args);
         }
       }
-    ```
+    }
+  ```
 
-    prototype 原型链 
+  prototype 原型链 
 
-    * 读取对象属性时，先从本身开始寻找，再向对象原型寻找，逐级向上，直至到Object.prototype，返回null
-    * instanceof运算符用来比较一个对象是否为某个构造函数的实例
-    * prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数
+  * 读取对象属性时，先从本身开始寻找，再向对象原型寻找，逐级向上，直至到Object.prototype，返回null
+  * instanceof运算符用来比较一个对象是否为某个构造函数的实例
+  * prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数
 
 3. prototype ：由于 JavaScript 的所有对象都有构造函数（只有null除外），而所有构造函数都有prototype属性（其实是所有函数都有prototype属性），所以所有对象都有自己的原型对象。**prototype 属性指向了构造函数创建的实例的原型，浏览器中的__proto__（每一个对象都有的属性，除去null）指向对象的原型。**
 
@@ -280,24 +338,24 @@ Person.prototype === selvin.__proto__  // true
   * `...变量名`，用于获取函数多余的参数，类似es5的arguments对象
   * 扩展运算符 `...`，相当于rest参数的逆运算，将一个数组转为用逗号分隔的参数序列
 
-    ```javascript
-    // ES5的写法
-    var arr1 = [0, 1, 2];
-    var arr2 = [3, 4, 5];
-    Array.prototype.push.apply(arr1, arr2);
+  ```javascript
+  // ES5的写法
+  var arr1 = [0, 1, 2];
+  var arr2 = [3, 4, 5];
+  Array.prototype.push.apply(arr1, arr2);
 
-    // ES6的写法
-    var arr1 = [0, 1, 2];
-    var arr2 = [3, 4, 5];
-    arr1.push(...arr2);
+  // ES6的写法
+  var arr1 = [0, 1, 2];
+  var arr2 = [3, 4, 5];
+  arr1.push(...arr2);
 
-    //上面代码的ES5写法中，push方法的参数不能是数组，所以只好通过apply方法变通使用push方法。
-    // 有了扩展运算符，就可以直接将数组传入push方法。
-    ```
+  //上面代码的ES5写法中，push方法的参数不能是数组，所以只好通过apply方法变通使用push方法。
+  // 有了扩展运算符，就可以直接将数组传入push方法。
+  ```
 
 8. 函数的length属性
 
-    * 指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
+  * 指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
 
 9. 箭头函数
   ```javascript
@@ -317,32 +375,32 @@ Person.prototype === selvin.__proto__  // true
 
 10. 函数尾递归
 
-   * 函数调用时，会在内存中形成一个“调用记录”（调用帧），保存调用位置和调用变量等信息。
-   * 如果在函数A的内部调用函数B，那么在A的调用帧上方，还会形成一个B的调用帧。等到B运行结束，将结果返回到A，B的调用帧才会消失。如果函数B内部还调用函数C，那就还有一个C的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）。
-   * 尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了。
+  * 函数调用时，会在内存中形成一个“调用记录”（调用帧），保存调用位置和调用变量等信息。
+  * 如果在函数A的内部调用函数B，那么在A的调用帧上方，还会形成一个B的调用帧。等到B运行结束，将结果返回到A，B的调用帧才会消失。如果函数B内部还调用函数C，那就还有一个C的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）。
+  * 尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了。
 
-     ```javascript
-     function f() {
-       let m = 1;
-       let n = 2;
-       return g(m + n);
-     }
-     f();
+  ```javascript
+  function f() {
+    let m = 1;
+    let n = 2;
+    return g(m + n);
+  }
+  f();
 
-     // 等同于
-     function f() {
-       return g(3);
-     }
-     f();
+  // 等同于
+  function f() {
+    return g(3);
+  }
+  f();
 
-     // 等同于
-     g(3);
-     ```
-   * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。
-     但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
+  // 等同于
+  g(3);
+  ```
+  * 上面代码中，如果函数g不是尾调用，函数f就需要保存内部变量m和n的值、g的调用位置等信息。
+    但由于调用g之后，函数f就结束了，所以执行到最后一步，完全可以删除 f(x) 的调用帧，只保留 g(3) 的调用帧。
 
-     这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。
-     如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
+    这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。
+    如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
 
 ---
 #### <a name="object">九. 对象</a>
@@ -384,35 +442,36 @@ Person.prototype === selvin.__proto__  // true
 
 4. 对象的Object()方法： 如果参数是原始类型的值，Object方法返回对应的包装对象的实例，如果Object方法的参数是一个对象，它总是返回原对象。
 
-    * Object.keys 查看一个对象本身的所有属性
+  * Object.keys 查看一个对象本身的所有属性
 
-      ```javascript
-        var o = {
-          key1: 1,
-          key2: 2
-        };
+  ```javascript
+    var o = {
+      key1: 1,
+      key2: 2
+    };
 
-        Object.keys(o);
-        // ['key1', 'key2']
-      ```
+    Object.keys(o);
+    // ['key1', 'key2']
+  ```
 
-    * Object.is(a,b) 判断两个值是否相等，修复了es5中-0与+0相等的问题，以及NaN与NaN自身不等的问题
+  * Object.is(a,b) 判断两个值是否相等，修复了es5中-0与+0相等的问题，以及NaN与NaN自身不等的问题
 
-    * Object.assign(targetobj1,sourceobj2,sourceobj3) 用于对象的合并，并返回合并之后的对象，属于浅拷贝，基于源对象的引用  
+  * Object.assign(targetobj1,sourceobj2,sourceobj3) 用于对象的合并，并返回合并之后的对象，属于浅拷贝，基于源对象的引用  
 
-    * Object.getOwnPropertyDescriptor
+  * Object.getOwnPropertyDescriptor
 
-      对象的每个属性都有一个可描述对象，此方法就是获取该属性的描述对象
-      ```javascript
-        let obj = { foo: 123 };
-        Object.getOwnPropertyDescriptor(obj, 'foo')
-        //  {
-        //    value: 123,
-        //    writable: true,
-        //    enumerable: true,
-        //    configurable: true
-        //  }
-      ```
+    对象的每个属性都有一个可描述对象，此方法就是获取该属性的描述对象
+
+  ```javascript
+    let obj = { foo: 123 };
+    Object.getOwnPropertyDescriptor(obj, 'foo')
+    //  {
+    //    value: 123,
+    //    writable: true,
+    //    enumerable: true,
+    //    configurable: true
+    //  }
+  ```
 
 5. 对象的解构赋值: 对象的属性没有次序，变量名必须与属性同名，才能取到正确的值。
   ```javascript
@@ -487,13 +546,13 @@ Person.prototype === selvin.__proto__  // true
 * IndexDB
 
 ---
-#### <a name="stack">十三. 栈与堆</a>
+#### <a name="stack">十三. 栈与堆-执行上下文-作用域和闭包</a>
 
-* 栈 ：有唯一编号的乒乓球，以及一个出口的圆筒乒乓球盒，栈的存取方式 根据乒乓球编号，依次拿出顶部乒乓球，直到拿到此编号的乒乓球 => 先进后出，后进先出
+1. 栈 ：有唯一编号的乒乓球，以及一个出口的圆筒乒乓球盒，栈的存取方式 根据乒乓球编号，依次拿出顶部乒乓球，直到拿到此编号的乒乓球 => 先进后出，后进先出
 
-* 堆 ：水平放置于书架上的书，书架 => 书 （key=>value），堆的存取方式 根据书名取出此书即可，无序
+2. 堆 ：水平放置于书架上的书，书架 => 书 （key=>value），堆的存取方式 根据书名取出此书即可，无序
 
-* Js代码逐行执行时，执行上下文（当前代码的执行环境（1.全局上下文；2.当前函数上下文；3.eval()））进出栈详解：
+3. Js代码逐行执行时，执行上下文（当前代码的执行环境（1.全局上下文；2.当前函数上下文；3.eval()））进出栈详解：
 
   首先全局上下文入栈，其次遇到函数时，当前函数执行上下文入栈，
   函数中又遇到函数，继续将当前函数执行上下文入栈，以此类推
@@ -507,16 +566,16 @@ Person.prototype === selvin.__proto__  // true
   * 函数的执行上下文的个数没有限制
   * 每次某个函数被调用，就会有个新的执行上下文为其创建，即使是调用的自身函数，也是如此。
 
-* 执行上下文都干了什么：
+4. 执行上下文都干了什么：
 
     简单描述：进入执行上下文后，首先创建变量对象，函数声明提升，变量声明（有值则跳过，无值则undefined），接着进入执行阶段，变量对象变为活动对象，活动对象中的属性及属性值能够访问，开始逐行执行代码，完成相关操作。
 
     当调用一个函数时（激活），一个新的执行上下文就会被创建。而一个执行上下文的生命周期可以分为两个阶段。
 
-    1. 创建阶段：在这个阶段中，执行上下文会分别创建`变量对象`，建立`作用域链`，以及确定`this的指向`
+    1. **创建阶段（即进入此执行上下文）**：在这个阶段中，执行上下文会分别创建`变量对象`，建立`作用域链`，以及确定`this的指向`
 
     * 变量对象：
-      (1) 建立arguments对象。检查当前上下文中的参数，建立该对象下的属性与属性值。
+      (1) 建立arguments对象。检查当前上下文（函数）中的参数，建立该对象下的属性与属性值。
 
       (2) 检查当前上下文的函数声明，也就是使用function关键字声明的函数。在变量对象中以函数名建立一个属性，属性值为指向该函数所在内存地址的引用。如果函数名的属性已经存在，那么该属性将会被新的引用所覆盖。
 
@@ -553,6 +612,7 @@ Person.prototype === selvin.__proto__  // true
       ```
 
     * this指向：是在函数被调用的时候确定的。
+
       **当函数调用时不被对象（非全局对象）拥有时，则此函数为独立调用，在严格模式下this指向undefined**
       * 全局对象中的this：指向全局对象本身
       * 对象属性中的this：此处特指对象在全局声明，this在非严格模式指向全局对象，严格模式指向undefined
@@ -594,13 +654,15 @@ Person.prototype === selvin.__proto__  // true
           console.log(foo()); // 运行会报错
           ```
 
-    2. 代码执行阶段：创建完成之后，就会开始执行代码，这个时候，会完成`变量赋值`，`函数引用`，以及执行其他代码。
-    3. 进入执行阶段后，变量对象变为活动对象：里面的属性都能被访问了，然后开始进行执行阶段的操作。
+    2. **代码执行阶段**：创建完成之后，就会开始执行代码，这个时候，会完成`变量赋值`，`函数引用`，以及执行其他代码。
+    3. **进入执行阶段后**，变量对象变为活动对象：里面的属性都能被访问了，然后开始进行执行阶段的操作。
 
 
-* 作用域和闭包
+5. 作用域和闭包
 
-1. 作用域：
+* 作用域：
+    
+    * 词法作用域（静态作用域）和动态作用域：因为 JavaScript 采用的是**词法作用域，函数的作用域在函数定义的时候就决定了**，而与词法作用域相对的是动态作用域，函数的作用域是在函数调用的时候才决定的。
 
     * 在JavaScript中，我们可以将作用域定义为一套规则,这套规则用来管理引擎如何在当前作用域以及嵌套的子作用域中根据标识符名称（变量名或者函数名）进行变量查找。
 
@@ -612,7 +674,7 @@ Person.prototype === selvin.__proto__  // true
     编译阶段由编译器完成，将代码翻译成可执行代码，这个阶段作用域规则会确定。
     执行阶段由引擎完成，主要任务是执行可执行代码，执行上下文在这个阶段创建。
 
-2. 闭包：当一个函数可以记住并访问所在的作用域（全局作用域除外），并在定义该函数的作用域之外执行时，该函数就可以称之为一个闭包。（假设函数A在函数B的内部进行定义了，并在函数B的作用域之外执行（不管是上层作用域，下层作用域，还有其他作用域），那么A就是一个闭包）
+* 闭包：当一个函数可以记住并访问所在的作用域（全局作用域除外），并在定义该函数的作用域之外执行时，该函数就可以称之为一个闭包。（假设函数A在函数B的内部进行定义了，并在函数B的作用域之外执行（不管是上层作用域，下层作用域，还有其他作用域），那么A就是一个闭包）
 
   ```javascript
   var fn = null;
