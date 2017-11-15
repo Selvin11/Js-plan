@@ -126,6 +126,7 @@ A new understanding about javascript
 #### <a name="array">六. 数组</a>
 
 1. 数组： Js中的数组，是按照顺序排列的一组值，索引为0开始的数字，索引值可以为任意数据类型
+
 2. 数组的方法：
   * valueOf() 
 
@@ -176,6 +177,9 @@ A new understanding about javascript
   * filter() 数组筛选，函数作为参数，返回结果为true的成员组成一个新的数组返回，原数组不变，第一个参数为函数，第二个参数为绑定函数的上下文（this指向）
 
 3. 数组的解构赋值：数组的元素是按照次序来排列的，变量的取值由它的位置来决定（模式匹配）。匹配失败，返回`undefined`，`var [a, b, c] = [1, 2, 3];`
+
+4. 类数组对象：拥有一个length属性和若干索引属性的对象。（Arguments对象）
+
     ​     
 
 ---
@@ -213,6 +217,15 @@ A new understanding about javascript
   * 生成对象的时候，必需用new命令，调用函数。
 
     ```javascript
+    // 原生实现new
+    function objectFactory() {
+      var obj = new Object(),
+          Constructor = [].shift.call(arguments)
+      obj.__proto__ = Constructor.prototype
+      var ret = Constructor.apply(obj, arguments)
+      return typeof ret === 'object' ? ret : obj
+    }
+
     var Vehicle = function (){
         this.price = 1000;
     };
@@ -333,6 +346,8 @@ Person.prototype === selvin.__proto__  // true
   //函数f传入参数为空，函数内部没有生成变量x，因此指向了全局变量x，如果此时全局环境也没有声明x变量，则会报错
   f() // 1
   ```
+
+  **函数参数的传递方式为共享传递**：在传递对象的时候，**传递对象的引用的副本**，传递非对象都是按值传递。
 
 7. rest 参数
   * `...变量名`，用于获取函数多余的参数，类似es5的arguments对象
